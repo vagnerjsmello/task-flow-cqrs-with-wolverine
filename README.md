@@ -1,45 +1,49 @@
-# Task Flow CQRS Without MediatR 🧠✅
+# Task Flow CQRS with Wolverine 🧠⚡
 
-This is a simple example of **CQRS (Command Query Responsibility Segregation)**.  
-It uses **.NET 9 Minimal API** and no external libraries.
+This is a simple example using **CQRS (Command Query Responsibility Segregation)**  
+with **.NET 9 Minimal API** and **Wolverine** for message handling.
 
-This project is a small **task manager API** (like a to-do list).  
-It uses **commands** to create tasks and **queries** to get tasks.
+> ⚠️ **Note:** This project does not use MediatR.  
+> Instead, it uses [Wolverine](https://wolverine.netlify.app/) – a free and powerful alternative.
 
-> ⚠️ **Note:** This project **does not use MediatR**.  
-> MediatR will be a **paid library**, so we use a simple and free solution.
+---
 
 ### ✨ Technologies
 
 - [.NET 9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 - C# 13
 - Minimal API
-- CQRS pattern
+- CQRS Pattern
+- [Wolverine](https://wolverine.netlify.app/)
 - OpenAPI (native from .NET 9)
+
+---
 
 ### 📁 Project Structure
 
-```
-TaskFlow.CQRS/
+``` bash
+TaskFlow.CQRS.Api/
 │
-├── Common/                # Interfaces for Commands and Queries
-├── Dispatchers/           # Logic to call the correct handler
 ├── Features/
-│   └── Tasks/             # Task logic
-│       ├── Commands/      # Write operations
-│       ├── Queries/       # Read operations
-│       └── Models/        # Task data
-├── Program.cs             # API configuration
+│   └── Tasks/
+│       ├── Commands/          # CreateTaskCommand and its handler
+│       ├── Queries/           # GetAllTasksQuery and its handler
+│       ├── Models/            # TaskModel class
+│       └── Data/              # In-memory task store
+│
+├── Program.cs                 # API configuration with Wolverine and OpenAPI
 └── README.md
 ```
+
+---
 
 ### 🚀 How to Run
 
 1. Clone the project:
 
    ```bash
-   git clone https://github.com/your-username/TaskFlow.CQRS.git
-   cd TaskFlow.CQRS
+   git clone https://github.com/your-username/task-flow-cqrs-with-wolverine.git
+   cd task-flow-cqrs-with-wolverine
    ```
 
 2. Run the project:
@@ -54,21 +58,21 @@ TaskFlow.CQRS/
    https://localhost:5001/openapi/v1.json
    ```
 
+---
+
 ### 📄 API Documentation
 
-This project uses **OpenAPI from .NET 9**.  
-There is no Swagger UI inside the project.
+This project uses **OpenAPI from .NET 9**.
 
-To see the API in Swagger UI:
+There is no Swagger UI in this project, but you can use the Swagger Editor online:
 
-1. Go to [https://editor.swagger.io](https://editor.swagger.io)  
-2. Copy and paste this link:
-
+1. Go to: [https://editor.swagger.io](https://editor.swagger.io)
+2. Paste this link:
    ```
-   https://localhost:7236/openapi/v1.json
-   or
-   http://localhost:7237/openapi/v1.json
+   https://localhost:5001/openapi/v1.json
    ```
+
+---
 
 ### 🛠️ Example Endpoints
 
@@ -87,12 +91,16 @@ To see the API in Swagger UI:
 
 `GET /tasks`
 
-## 📌 Goal
+---
+
+## 🎯 Goal
 
 This project is for learning.  
-It shows how to use the CQRS pattern in a modern and simple way with .NET.
+It shows how to use the CQRS pattern with Minimal API and Wolverine.
 
-You can use it to study or as a starting point for bigger projects.
+You can use it to learn, build new features, or start other projects.
+
+---
 
 ## 📄 License
 
