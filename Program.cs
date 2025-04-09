@@ -1,20 +1,23 @@
-using TaskFlow.CQRS.Api.Common;
-using TaskFlow.CQRS.Api.Dispatchers;
 using TaskFlow.CQRS.Api.Features.Tasks.Commands;
 using TaskFlow.CQRS.Api.Features.Tasks.Models;
 using TaskFlow.CQRS.Api.Features.Tasks.Queries;
+using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-//Services
-builder.Services.AddScoped<ICommandDispatcher, CommandDispatcher>();
-builder.Services.AddScoped<IQueryDispatcher, QueryDispatcher>();
+//Use Wolverine for CQRS and DI
+builder.Host.UseWolverine();
 
-builder.Services.AddScoped<ICommandHandler<CreateTaskCommand, Guid>, CreateTaskCommandHandler>();
-builder.Services.AddScoped<IQueryHandler<GetAllTasksQuery, IEnumerable<TaskModel>>, GetAllTasksQueryHandler>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
 
 
 var app = builder.Build();
@@ -27,17 +30,26 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
+app.UseCors(policy => 
+    policy.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader());
+
+
 // Endpoints
-app.MapPost("/tasks", async (CreateTaskCommand command, ICommandDispatcher dispatcher, CancellationToken ct) =>
+app.MapPost("/tasks", async (CreateTaskCommand command, IMessageBus bus) =>
 {
-    var id = await dispatcher.Dispatch<CreateTaskCommand, Guid>(command, ct);
+    var id = await bus.InvokeAsync<Guid>(command);
     return Results.Created($"/tasks/{id}", new { Id = id });
 });
 
-app.MapGet("/tasks", async (IQueryDispatcher dispatcher, CancellationToken ct) =>
+app.MapGet("/tasks", async (IMessageBus bus) =>
 {
-    var result = await dispatcher.Dispatch<GetAllTasksQuery, IEnumerable<TaskModel>>(new(), ct);
+    var result = await bus.InvokeAsync<IEnumerable<TaskModel>>(new GetAllTasksQuery());
     return Results.Ok(result);
 });
+
 
 app.Run();
