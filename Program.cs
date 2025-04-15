@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-//Use Wolverine for CQRS and DI
+// Wolverine handles CQRS, message dispatching, and uses built-in DI
 builder.Host.UseWolverine();
 
 
@@ -32,7 +32,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-app.UseCors(policy => 
+app.UseCors(policy =>
     policy.AllowAnyOrigin()
           .AllowAnyMethod()
           .AllowAnyHeader());

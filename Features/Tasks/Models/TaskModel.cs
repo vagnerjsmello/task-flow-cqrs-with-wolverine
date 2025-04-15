@@ -12,7 +12,7 @@ public class TaskModel
         Id = Guid.NewGuid();
         Title = title ?? throw new ArgumentNullException(nameof(title));
         Description = description ?? throw new ArgumentNullException(nameof(description));
-        CreatedAt = DateTime.UtcNow;        
+        CreatedAt = DateTime.UtcNow;
     }
 }
 

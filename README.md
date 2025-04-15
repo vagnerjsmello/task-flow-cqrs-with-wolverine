@@ -55,7 +55,7 @@ TaskFlow.CQRS.Api/
 3. Open this link to see the API documentation:
 
    ```
-   https://localhost:5001/openapi/v1.json
+   https://localhost:7236/openapi/v1.json
    ```
 
 ---
